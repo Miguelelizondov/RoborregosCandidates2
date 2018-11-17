@@ -114,8 +114,8 @@ void cambiarpotenciamotores(int x,int dif){
 }
 void avanzar(){
 
-  cambiarpotenciamotores(130,40);
-  while(contadorI<30 && contadorD<25){
+  cambiarpotenciamotores(145,10);
+  while(contadorI<27 && contadorD<22){
    digitalWrite(derecha1, HIGH);
    digitalWrite(derecha2, LOW);
    digitalWrite(izquierda2, LOW);
@@ -213,7 +213,7 @@ void giroejeL(){
      }
  
     cambiarpotenciamotores(250,80);
-  while(contadorI<=15 && contadorD<18){
+  while(contadorI<=19 && contadorD<22){
    digitalWrite(derecha2, HIGH);
    digitalWrite(derecha1, LOW);
    digitalWrite(izquierda1, HIGH);
@@ -243,7 +243,7 @@ void giroejeR(){
      }
     
    cambiarpotenciamotores(170,-80) ;
-   while(contadorI<=18 && contadorD<15){
+   while(contadorI<=20 && contadorD<17){
    digitalWrite(derecha2, LOW);
    digitalWrite(derecha1, HIGH);
    digitalWrite(izquierda1, LOW);
@@ -266,7 +266,7 @@ void giroejeR(){
 
 int Detener(){
   cambiarpotenciamotores(0,0);
-   delay(600);
+   delay(1000);
   contadorI = 0;
   contadorD = 0;
 }
@@ -384,19 +384,19 @@ void MovimientoUnidadDelayFASE2(){
       }
    if(getDistanceF()>15){
   
-  while(contadorI<= 19 && contadorD<=14 && !sensorLinea()){
+  while(contadorI<= 19 && contadorD<=13 && !sensorLinea()){
    
-    cambiarpotenciamotores(145,40);
+    cambiarpotenciamotores(145,15);
    digitalWrite(derecha1, HIGH);
    digitalWrite(derecha2, LOW);
    digitalWrite(izquierda2, LOW);
    digitalWrite(izquierda1, HIGH);
     }
     boolean lineafase2=false;
-    if(!(contadorI>= 19 || contadorD>=14)){
+    if(!(contadorI>= 19 || contadorD>=13)){
       lineafase2=true;
       }
-    if(contadorD>=9 || contadorI>=149){
+    if(contadorD>=9 || contadorI>=15){
         if(positivox){
           fase2x++;   
           }else if(negativox){
@@ -423,25 +423,38 @@ void MovimientoUnidadDelayFASE2(){
                   }else{
                       if(positivox && fase2x==0){
                         giroejeRFASE2();
+                          Detener(); 
                           fase2[fase2y][fase2x]=1;
                         }else if(negativox && fase2x==1){
-                        giroejeRFASE2();  
+                        giroejeRFASE2();
+                          Detener();   
                         fase2[fase2y][fase2x]=1;
                           }else if(positivoy && fase2x==0){
                             giroejeRFASE2();
+                              Detener(); 
                             }
                             else if(positivoy && fase2x==1){
                             giroejeLFASE2();
+                              Detener(); 
                             }
                             else if(negativoy && fase2x==0){
                             giroejeLFASE2();
+                              Detener(); 
                             } 
                             else if(negativoy && fase2x==1){
                             giroejeRFASE2();
+                              Detener(); 
                             }     
                                          
                     }
-                }
+                }else{
+                  atrasPoquitoFASE2();
+                  Detener();
+                    avanzar();
+                    Detener();
+                    fase++;
+                    return;
+                  }
         }else{
           if(positivox){
             giroejeLFASE2();
@@ -471,7 +484,7 @@ void giroejeLFASE2(){
      }
  
     cambiarpotenciamotores(250,80);
-  while(contadorI<=18 && contadorD<21){
+  while(contadorI<=19 && contadorD<21){
    digitalWrite(derecha2, HIGH);
    digitalWrite(derecha1, LOW);
    digitalWrite(izquierda1, HIGH);
@@ -514,7 +527,7 @@ void   giroejeRFASE2(){
      }
     
    cambiarpotenciamotores(170,-80) ;
-   while(contadorI<=21 && contadorD<18){
+   while(contadorI<20 && contadorD<=18){
    digitalWrite(derecha2, LOW);
    digitalWrite(derecha1, HIGH);
    digitalWrite(izquierda1, LOW);
@@ -755,7 +768,7 @@ char getColor(){
             return color;
     }
  void rampa1(){
-  cambiarpotenciamotores(200,50);
+  cambiarpotenciamotores(200,25);
    digitalWrite(derecha2, LOW);
    digitalWrite(derecha1, HIGH);
    digitalWrite(izquierda1, HIGH);
@@ -768,7 +781,7 @@ bool sensorLinea(){
  V2 = analogRead(A0);
   Serial.print("2-->");
   Serial.println(V2);
-  if((V2 > 325)){
+  if((V2 > 450)){
     return true;
   }
   else{
@@ -833,7 +846,7 @@ boolean step (int x, int y) {
                 digitalWrite(LEDR,LOW);
                   }
                 }
-                if(getColor()=='a'){
+                if(getColor()=='a' && x==1 && y==2){
                    for(int iVeces =0;iVeces<10;iVeces++){
                 digitalWrite(LEDA,HIGH);
                 delay(200);
@@ -845,7 +858,7 @@ boolean step (int x, int y) {
                   }
                 }
                 }
-                if(getColor()=='v'){
+                if(getColor()=='v' && x==1 && y==3){
                    for(int iVeces =0;iVeces<10;iVeces++){
                 digitalWrite(LEDV,HIGH);
                 delay(200);
@@ -1306,9 +1319,6 @@ void solve(int x, int y) {
 int countbola=0;
 void loop()
 {   
- 
-  
-  
 
   
   char azul=getColor();
@@ -1360,8 +1370,11 @@ void loop()
  Serial.println("Fase: ");
  Serial.print(fase);
     while(fase==3){
-     // MovimientoLaberinto();
-
+      MovimientoLaberinto();
+      if(getColor()=='r'){
+        
+        }
+/*
     solve(5, 1);
      if(countnegro==1 || countnegro==4){
                 //  IR A AZUL
@@ -1448,8 +1461,14 @@ void loop()
                Detener();
                avanzar();
                }
-      
+      */
+   if(getColor()=='r'){
+          giroejeR();
+          Detener();
+          break;
+      }
    }
+while(true)
 rampa1();
 
 }
