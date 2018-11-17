@@ -1,6 +1,7 @@
 #include <Ultrasonic.h>
-
+  boolean atrasAlgo;
   int fase2[5][2];
+  int fase2count[5][2];
   int fase2x=1;
   int fase2y=0;
   boolean positivox=false;
@@ -58,11 +59,7 @@ boolean anteriorD = 0;
 boolean actualD = 0; 
 int contadorD = 0; 
 int sensorEncoderD =18 ;
-int pEI = 0;
-int pED = 0;
-int contadorE = 0;
-int contadorI2=0;
-int contadorD2=0;
+
 
 
 void setup()
@@ -86,8 +83,12 @@ void setup()
   pinMode(LEDA, OUTPUT);
  
   for(int i=0;i<5;i++)
-    for(int j=0;j<2;j++)
+    for(int j=0;j<2;j++){
     fase2[i][j]=0;
+    fase2count[i][j]=0;
+      
+      }
+      fase2count[fase2y][fase2x]=1;
     
   pinMode(Trigger1, OUTPUT); //pin como salida
   pinMode(Echo1, INPUT);  //pin como entrada
@@ -114,42 +115,11 @@ void cambiarpotenciamotores(int x,int dif){
 void avanzar(){
 
   cambiarpotenciamotores(130,40);
-  contadorE=0;
   while(contadorI<30 && contadorD<25){
    digitalWrite(derecha1, HIGH);
    digitalWrite(derecha2, LOW);
    digitalWrite(izquierda2, LOW);
    digitalWrite(izquierda1, HIGH);
-   contadorE++;
-   delay(20);
-    if(contadorE%20==0){
-      if(contadorE==20){
-        contadorI2=contadorI;
-        contadorD2=contadorD;
-        }else{
-          if(contadorI2==contadorI){
-             cambiarpotenciamotores(245,40);
-            digitalWrite(derecha1, HIGH);
-             digitalWrite(derecha2, LOW);
-            digitalWrite(izquierda2, LOW);
-            digitalWrite(izquierda1, HIGH);
-            delay(200);
-          }
-           
-          if(contadorD2==contadorD){
-             cambiarpotenciamotores(245,40);
-            digitalWrite(derecha1, HIGH);
-             digitalWrite(derecha2, LOW);
-            digitalWrite(izquierda2, LOW);
-            digitalWrite(izquierda1, HIGH);
-            delay(200);
-          }
-
-          
-      }
-  }
-
-    
   }
   contadorI = 0;
   contadorD = 0;
@@ -157,7 +127,7 @@ void avanzar(){
 }
 
 boolean unidadArreglo = true;
-/*
+
 void arreglarUnidad(){
  
   while(unidadArreglo != false){
@@ -175,8 +145,6 @@ void arreglarUnidad(){
   contadorD = 0;
   
 }
-*/
-
 void avanzarFase2(){
 
   cambiarpotenciamotores(90,18);
@@ -212,7 +180,19 @@ while(contadorI<7 && contadorD<5){
    contadorI = 0;
   contadorD = 0;
 }
+void atrasPoquitoFASE2(){
+cambiarpotenciamotores(90,18);
 
+while(contadorI<14 && contadorD<12){
+ digitalWrite(derecha1, LOW);
+   digitalWrite(derecha2, HIGH);
+   digitalWrite(izquierda2, HIGH);
+   digitalWrite(izquierda1, LOW);
+   }
+  contadorI = 0;
+  contadorD = 0;
+
+}
 void atrasPoquito(){
 cambiarpotenciamotores(90,18);
 
@@ -226,118 +206,70 @@ while(contadorI<7 && contadorD<5){
   contadorD = 0;
 
 }
-
 void giroejeL(){
-  
-     if(getDistanceR()<20){
-
-      atras();
-      Detener();
-      avanzarPoquito();
-      Detener();
-      
+ 
+  if(getDistanceR()<15){
+        atrasAlgo = true;
      }
-     
-     
+ 
     cambiarpotenciamotores(250,80);
-    contadorE = 0;
-  while(contadorI<=19 && contadorD<22){
+  while(contadorI<=15 && contadorD<18){
    digitalWrite(derecha2, HIGH);
    digitalWrite(derecha1, LOW);
    digitalWrite(izquierda1, HIGH);
    digitalWrite(izquierda2, LOW);
-   contadorE++;
-   delay(20);
-    if(contadorE%20==0){
-      if(contadorE==20){
-        contadorI2=contadorI;
-        contadorD2=contadorD;
-        }else{
-          if(contadorI2==contadorI){
-             cambiarpotenciamotores(245,40);
-            digitalWrite(derecha1, HIGH);
-             digitalWrite(derecha2, LOW);
-            digitalWrite(izquierda2, LOW);
-            digitalWrite(izquierda1, HIGH);
-            delay(200);
-          }
-           
-          if(contadorD2==contadorD){
-             cambiarpotenciamotores(245,40);
-            digitalWrite(derecha1, HIGH);
-             digitalWrite(derecha2, LOW);
-            digitalWrite(izquierda2, LOW);
-            digitalWrite(izquierda1, HIGH);
-            delay(200);
-          }
-
-          
-      }
   }
-  }
-  contadorI = 0;
+    contadorI = 0;
   contadorD = 0;
-   
- 
-}
-void giroejeR(){
- 
-  if(getDistanceL()<20){
-
+  
+  if (atrasAlgo){
+    
+      Detener();
       atras();
       Detener();
-       avanzarPoquito();
+      avanzarPoquito();
       Detener();
+  }
+  
+
+   atrasAlgo= false;
+   
+}
+void giroejeR(){
+
+     if(getDistanceL()<15){
+        atrasAlgo = true;
+      
      }
     
-   cambiarpotenciamotores(170,-80);
-   contadorE = 0;
-   while(contadorI<=22 && contadorD<19){
+   cambiarpotenciamotores(170,-80) ;
+   while(contadorI<=18 && contadorD<15){
    digitalWrite(derecha2, LOW);
    digitalWrite(derecha1, HIGH);
    digitalWrite(izquierda1, LOW);
    digitalWrite(izquierda2, HIGH);
-    contadorE++;
-   delay(20);
-    if(contadorE%20==0){
-      if(contadorE==20){
-        contadorI2=contadorI;
-        contadorD2=contadorD;
-        }else{
-          if(contadorI2==contadorI){
-             cambiarpotenciamotores(245,40);
-            digitalWrite(derecha1, HIGH);
-             digitalWrite(derecha2, LOW);
-            digitalWrite(izquierda2, LOW);
-            digitalWrite(izquierda1, HIGH);
-            delay(200);
-          }
-           
-          if(contadorD2==contadorD){
-             cambiarpotenciamotores(245,40);
-            digitalWrite(derecha1, HIGH);
-             digitalWrite(derecha2, LOW);
-            digitalWrite(izquierda2, LOW);
-            digitalWrite(izquierda1, HIGH);
-            delay(200);
-          }
-
-          
-      }
-  }
    }
+   Detener();
    contadorI = 0;
   contadorD = 0;
- 
+  
+   if (atrasAlgo){
+      
+      atras();
+      Detener();
+      avanzarPoquito();
+      Detener();
+  }
+  atrasAlgo = false;
+
 }
 
 int Detener(){
   cambiarpotenciamotores(0,0);
-   delay(1000);
-   contadorI = 0;
+   delay(600);
+  contadorI = 0;
   contadorD = 0;
 }
-
 
 
 boolean encoderI(boolean anteriorI) {
@@ -398,8 +330,6 @@ void MovimientoUnidadDelayFASE1(){
    if(getDistanceF()>12){
    avanzar();
     Detener(); 
-
-    Detener(); 
  }
  
  
@@ -409,32 +339,18 @@ void MovimientoUnidadDelayFASE1(){
       if((getDistanceL()<15) && (getDistanceR()<15)){
         giroejeR();
         Detener();
-        
-        avanzarPoquito();
-        Detener();
-      
-        
         }
         
         else if(getDistanceL()<25){
           
           giroejeR();
           Detener();
-         
-          avanzarPoquito();
-          Detener();
-          
-          
           
           }
           
           else{
             giroejeL();
             Detener(); 
-       
-            avanzarPoquito(); 
-            Detener();
-            
           }
     }
 
@@ -445,12 +361,13 @@ void MovimientoUnidadDelayFASE2(){
   Serial.println(fase2x);
   Serial.print("Posy:");
   Serial.println(fase2y);
-  
-  if(fase2[fase2x][fase2y]!=1 && !(fase2x==0 && positivoy) ){
+  boolean activo=false;
+  if(fase2[fase2y][fase2x]!=1 && !(fase2x==0 && positivoy) && !negativox && !positivox && !(fase2count[fase2y][fase2x]>=2 && fase2x==1) ){
         giroejeLFASE2(); 
         Detener();
+        activo=true;
     }
-    
+    //ULTIMA CASILLA
     if(fase2x==0 && fase2y==4 && positivoy){
            giroejeLFASE2(); 
             Detener();
@@ -459,20 +376,29 @@ void MovimientoUnidadDelayFASE2(){
             fase++;
             return;
          }
+     if(fase2x==0 && fase2y==4 && negativox){
+      avanzar();
+      Detener();
+      fase++;
+      return;
+      }
    if(getDistanceF()>15){
   
-  while(contadorI<= 29 && contadorD<=24 && !sensorLinea()){
+  while(contadorI<= 19 && contadorD<=14 && !sensorLinea()){
    
-    cambiarpotenciamotores(130,40);
+    cambiarpotenciamotores(145,40);
    digitalWrite(derecha1, HIGH);
    digitalWrite(derecha2, LOW);
    digitalWrite(izquierda2, LOW);
    digitalWrite(izquierda1, HIGH);
     }
-    Detener();
-    if(contadorD>=19 || contadorI>=23){
+    boolean lineafase2=false;
+    if(!(contadorI>= 19 || contadorD>=14)){
+      lineafase2=true;
+      }
+    if(contadorD>=9 || contadorI>=149){
         if(positivox){
-          fase2x++;      
+          fase2x++;   
           }else if(negativox){
             fase2x--;  
             }else if(negativoy){
@@ -480,38 +406,92 @@ void MovimientoUnidadDelayFASE2(){
               }else{
                 fase2y++;
                 } 
+          fase2count[fase2y][fase2x]++;   
       }
-     contadorI = 0;
-    contadorD = 0;
-      if(sensorLinea()){
-                 avanzarPoquito();
-                 Detener();
+     Detener();
+      if(lineafase2){
+               //  avanzarPoquito();
+                // Detener();
                  if(!sensorLinea()){
-                /*  fase++;
-                  atrasPoquito();
-                  return;
-                  }else*/
-                 fase2[fase2x][fase2y]=1;
-                 atrasPoquito();
+                 atrasPoquitoFASE2();
                  Detener();
+               
+                if(activo){
                  giroejeRFASE2();   
                     Detener();
+               fase2[fase2y][fase2x]=1;
+                  }else{
+                      if(positivox && fase2x==0){
+                        giroejeRFASE2();
+                          fase2[fase2y][fase2x]=1;
+                        }else if(negativox && fase2x==1){
+                        giroejeRFASE2();  
+                        fase2[fase2y][fase2x]=1;
+                          }else if(positivoy && fase2x==0){
+                            giroejeRFASE2();
+                            }
+                            else if(positivoy && fase2x==1){
+                            giroejeLFASE2();
+                            }
+                            else if(negativoy && fase2x==0){
+                            giroejeLFASE2();
+                            } 
+                            else if(negativoy && fase2x==1){
+                            giroejeRFASE2();
+                            }     
+                                         
                     }
+                }
         }else{
-           giroejeRFASE2();  
+          if(positivox){
+            giroejeLFASE2();
+              fase2[fase2y][fase2x]=1;
+             Detener(); 
+            }
+            if(negativox){
+              giroejeRFASE2();
            Detener(); 
+              }
+          
+          
           }
   
       
 }else {
-  fase2[fase2x][fase2y]=1;
-   giroejeRFASE2(); 
-   Detener();
+  //fase2[fase2y][fase2x]=1;
+  // giroejeRFASE2(); 
+  // Detener();
   }
 
 }
 void giroejeLFASE2(){
-  giroejeL();
+  
+  if(getDistanceR()<15){
+        atrasAlgo = true;
+     }
+ 
+    cambiarpotenciamotores(250,80);
+  while(contadorI<=18 && contadorD<21){
+   digitalWrite(derecha2, HIGH);
+   digitalWrite(derecha1, LOW);
+   digitalWrite(izquierda1, HIGH);
+   digitalWrite(izquierda2, LOW);
+  }
+    contadorI = 0;
+  contadorD = 0;
+  
+  if (atrasAlgo){
+    
+      Detener();
+      atras();
+      Detener();
+      avanzarPoquito();
+      Detener();
+  }
+  
+
+   atrasAlgo= false;
+   
          if(positivox){
           positivoy=true;
           positivox=false;
@@ -527,8 +507,31 @@ void giroejeLFASE2(){
                 }
   }
 void   giroejeRFASE2(){
-      giroejeR();
-         
+      
+     if(getDistanceL()<15){
+        atrasAlgo = true;
+      
+     }
+    
+   cambiarpotenciamotores(170,-80) ;
+   while(contadorI<=21 && contadorD<18){
+   digitalWrite(derecha2, LOW);
+   digitalWrite(derecha1, HIGH);
+   digitalWrite(izquierda1, LOW);
+   digitalWrite(izquierda2, HIGH);
+   }
+   Detener();
+   contadorI = 0;
+  contadorD = 0;
+  
+   if (atrasAlgo){
+      
+      atras();
+      Detener();
+      avanzarPoquito();
+      Detener();
+  }
+  atrasAlgo = false;
          if(positivox){
           negativoy=true;
           positivox=false;
@@ -585,17 +588,11 @@ void MovimientoLaberinto(){
         
         giroejeL();
         Detener();
-     
-        avanzarPoquito();
-        Detener();
       }
    }else{
     
     if (getDistanceL()<15){
     giroejeR();
-    Detener();
-
-    avanzarPoquito();
     Detener();
     avanzar();
     Detener();
@@ -652,22 +649,19 @@ void calibrarcolor(){
 char getColor(){
           digitalWrite(S2,LOW);
           digitalWrite(S3,LOW);
-           digitalWrite(LEDR,LOW);
-           digitalWrite(LEDA,LOW);
-            digitalWrite(LEDV,LOW);
-               digitalWrite(LEDAM,LOW);
           // Se lee el valor de la frecuencia 
           frecuenciaRoja = pulseIn(out, LOW);
           
          // Filtro para que no tome valores más grandes que los máx y mínimos
-        if(frecuenciaRoja>80 || frecuenciaRoja<35){
+        if(frecuenciaRoja>70 || frecuenciaRoja<39){
           rojo = 0;
          }
          
          // Si el valor entra en el rango, hace un map de los valores
-         if (frecuenciaRoja>=35 && frecuenciaRoja<=80){
-          rojo  = map(frecuenciaRoja,35,80,255,0);
+         if (frecuenciaRoja>=39 && frecuenciaRoja<=70){
+          rojo  = map(frecuenciaRoja,39,70,255,0);
          }
+         delay(5);
         
           // Ajustando los filtros verdes de los fotodiodos para que sean leídos 
           digitalWrite(S2,HIGH);
@@ -677,15 +671,15 @@ char getColor(){
         frecuenciaVerde = pulseIn(out, LOW);
         
          // Filtro para que no tome valores más grandes que los máx y mínimos
-          if(frecuenciaVerde>106 || frecuenciaVerde<42){
+          if(frecuenciaVerde>82 || frecuenciaVerde<45){
           verde = 0;
          }
          
          // Si el valor entra en el rango, hace un map de los valores
-         if (frecuenciaVerde>=42 && frecuenciaVerde<=106){
-          verde = map(frecuenciaVerde,42,106,255,0);
+         if (frecuenciaVerde>=45 && frecuenciaVerde<=82){
+          verde = map(frecuenciaVerde,45,82,255,0);
          }
-         
+              delay(5);
           // Ajustando los filtros azules de los fotodiodos para que sean leídos 
           digitalWrite(S2,LOW);
           digitalWrite(S3,HIGH);
@@ -694,16 +688,27 @@ char getColor(){
           frecuenciaAzul = pulseIn(out, LOW);
         
         // Filtro para que no tome valores más grandes que los máx y mínimos
-        if(frecuenciaAzul>138 || frecuenciaAzul<50){
+        if(frecuenciaAzul>130 || frecuenciaAzul<29){
           azul = 0;
          }
          
          // Si el valor entra en el rango, hace un map de los valores
-         if (frecuenciaAzul>=50 && frecuenciaAzul<=138){
-          azul = map(frecuenciaAzul,50,138,255,0);
+         if (frecuenciaAzul>=29&& frecuenciaAzul<=130){
+          azul = map(frecuenciaAzul,29,130,255,0);
          }
+              delay(5);
 
-
+      if (frecuenciaAzul>=52 && frecuenciaAzul<=90 && frecuenciaVerde>=22 && frecuenciaVerde<=60 && frecuenciaRoja>=19 && frecuenciaRoja<=40){
+         Serial.println("¡Color Amarillo!");
+            color = 'y';
+            
+       //       digitalWrite(LEDAM,HIGH);
+            
+            return color;
+         }
+         
+      
+       
         Serial.print(" R = ");
          Serial.print(rojo);
           Serial.print("  ");
@@ -718,43 +723,34 @@ char getColor(){
         //Impresion de los valores de cada color
        
 
-
-      if (frecuenciaAzul>=52 && frecuenciaAzul<=105 && frecuenciaVerde>=27 && frecuenciaVerde<=72 && frecuenciaRoja>=19 && frecuenciaRoja<=50){
-         Serial.println("¡Color Amarillo!");
-            color = 'y';
-            
-              digitalWrite(LEDAM,HIGH);
-            
-            return color;
-         }
-       
                if (rojo>azul && rojo>verde){
-                digitalWrite(LEDR,HIGH);
+   //             digitalWrite(LEDR,HIGH);
           Serial.println("¡Color Rojo!");
           color = 'r';
            return color;
-          delay(200);
+          delay(100);
           }
           
           if (azul>rojo && azul>verde){
-            digitalWrite(LEDA,HIGH);
+       //     digitalWrite(LEDA,HIGH);
             Serial.println("¡Color Azul!");
             color = 'a';
              return color;
-              delay(200);
+              delay(100);
               
           }
           
           if (verde>rojo && verde>azul){
-            digitalWrite(LEDV,HIGH);
+        //    digitalWrite(LEDV,HIGH);
             Serial.println("¡Color Verde!");
             color = 'v';
              return color;
              
-              delay(200);
+              delay(100);
           }
           
-     
+
+
           
             return color;
     }
@@ -766,13 +762,13 @@ char getColor(){
    digitalWrite(izquierda2, LOW);
    delay(12000);
  }
+ 
 bool sensorLinea(){
 
  V2 = analogRead(A0);
   Serial.print("2-->");
   Serial.println(V2);
-  delay(1000);
-  if((V2 > 415)){
+  if((V2 > 325)){
     return true;
   }
   else{
@@ -814,8 +810,8 @@ bool sensorbola(){
       {'#', '#', '#', '#', '#'},
       };
 
-boolean step (int x, int y,int dir) {
-    
+boolean step (int x, int y) {
+    int dir =direccionactual;
  
     /** Accept case - we found the exit **/
     if (maze[x][y] == 'X') {
@@ -828,8 +824,21 @@ boolean step (int x, int y,int dir) {
     }
                 if(!sensorLinea()){
                 countnegro++;
+                Detener();
+                for(int iVeces =0;iVeces<10;iVeces++){
+             //   digitalWrite(LEDA,HIGH);
+                digitalWrite(LEDR,HIGH);
+                delay(200);
+             //   digitalWrite(LEDA,LOW);
+                digitalWrite(LEDR,LOW);
+                  }
                 }
                 if(getColor()=='a'){
+                   for(int iVeces =0;iVeces<10;iVeces++){
+                digitalWrite(LEDA,HIGH);
+                delay(200);
+                digitalWrite(LEDA,LOW);
+                  }
                 for (int x=0; x<7; x++) {
                   for (int y=0; y<5; y++) {
                     colorazul[x][y]= maze[x][y];
@@ -837,6 +846,11 @@ boolean step (int x, int y,int dir) {
                 }
                 }
                 if(getColor()=='v'){
+                   for(int iVeces =0;iVeces<10;iVeces++){
+                digitalWrite(LEDV,HIGH);
+                delay(200);
+                digitalWrite(LEDV,LOW);
+                  }
                 for (int x=0; x<7; x++) {
                   for (int y=0; y<5; y++) {
                     colorverde[x][y]= maze[x][y];
@@ -851,8 +865,8 @@ boolean step (int x, int y,int dir) {
     boolean result,R2=false;  
     
     // Try to go Down
-    if(!(x==5 && y==1))
-                if(maze[x+1][y] != 'Y')
+                
+                if(maze[x][y-1] != 'Y' && maze[x][y-1] != '#' && maze[x][y-1] != '*')
                 if(direccionactual==0){
                    if(getDistanceR()>25){
                     giroejeR();
@@ -879,7 +893,8 @@ boolean step (int x, int y,int dir) {
                 if(R2){
                 direccionactual=3;
                 avanzar();
-    result = step(x+1, y,direccionactual);
+                Detener();
+    result = step(x, y-1);
                     if (result) { return true;}
                     else{
                         if(dir==0){
@@ -899,6 +914,7 @@ boolean step (int x, int y,int dir) {
                         }
                           avanzar();
                           Detener();
+                          direccionactual=1;
                         }else if(dir==1){
                             
                          if(direccionactual==3){
@@ -915,6 +931,7 @@ boolean step (int x, int y,int dir) {
                             }
                            avanzar();
                                 Detener();
+                                direccionactual=0;
                         }else if(dir==2){
                                     if(direccionactual==0){
                                giroejeR();
@@ -931,6 +948,7 @@ boolean step (int x, int y,int dir) {
                            }
                             avanzar();
                             Detener();
+                              direccionactual=3;
                         }else{
                           if(direccionactual==0){
                             giroejeL();
@@ -946,13 +964,15 @@ boolean step (int x, int y,int dir) {
                             }
                           avanzar();
                           Detener();
+                           direccionactual=2;
                         }
                     }
                 }               
                 
     // Try to go Left
                 R2=false;
-                if(maze[x][y-1] != 'Y')
+                if(!(x==5 && y==1))
+                if(maze[x-1][y] != 'Y' && maze[x-1][y] != '#' && maze[x-1][y] != '*')
                  if(direccionactual==0){
                     giroejeR();
                     Detener();
@@ -980,7 +1000,8 @@ boolean step (int x, int y,int dir) {
                  if(R2){
                 direccionactual=1;
                 avanzar();
-    result = step(x, y-1,direccionactual);
+                Detener();
+    result = step(x-1, y);
     if (result) { return true;}
                 else{
                         if(dir==0){
@@ -1000,6 +1021,7 @@ boolean step (int x, int y,int dir) {
                         }
                           avanzar();
                           Detener();
+                          direccionactual=1;
                         }else if(dir==1){
                             
                          if(direccionactual==3){
@@ -1016,6 +1038,7 @@ boolean step (int x, int y,int dir) {
                             }
                            avanzar();
                                 Detener();
+                                direccionactual=0;
                         }else if(dir==2){
                                     if(direccionactual==0){
                                giroejeR();
@@ -1032,6 +1055,7 @@ boolean step (int x, int y,int dir) {
                            }
                             avanzar();
                             Detener();
+                            direccionactual=3;
                         }else{
                           if(direccionactual==0){
                             giroejeL();
@@ -1047,12 +1071,13 @@ boolean step (int x, int y,int dir) {
                             }
                           avanzar();
                           Detener();
+                          direccionactual=2;
                         }
                     }
     } 
     
     // Try to go Up
-                 if(maze[x-1][y] != 'Y')
+                 if(maze[x][y+1] != 'Y' && maze[x][y+1] != '#' && maze[x][y+1] != '*')
                   if(direccionactual==0){
                     if(getDistanceL()>25){
                     giroejeL();
@@ -1079,7 +1104,8 @@ boolean step (int x, int y,int dir) {
                 if(R2){
                 direccionactual=2;
                 avanzar();
-    result = step(x-1, y,direccionactual);
+                Detener();
+    result = step(x, y+1);
     if (result) { return true;}
                 else{
                         if(dir==0){
@@ -1099,6 +1125,7 @@ boolean step (int x, int y,int dir) {
                         }
                           avanzar();
                           Detener();
+                          direccionactual=1;
                         }else if(dir==1){
                             
                          if(direccionactual==3){
@@ -1115,6 +1142,7 @@ boolean step (int x, int y,int dir) {
                             }
                            avanzar();
                                 Detener();
+                                direccionactual=0;
                         }else if(dir==2){
                                     if(direccionactual==0){
                                giroejeR();
@@ -1131,6 +1159,7 @@ boolean step (int x, int y,int dir) {
                            }
                             avanzar();
                             Detener();
+                            direccionactual=3;
                         }else{
                           if(direccionactual==0){
                             giroejeL();
@@ -1146,12 +1175,13 @@ boolean step (int x, int y,int dir) {
                             }
                           avanzar();
                           Detener();
+                          direccionactual=2;
                         }
                     }
                 }
     // Try to go Right
                 R2=false;
-                if(maze[x][y+1] != 'Y')
+                if(maze[x+1][y] != 'Y' && maze[x+1][y] != '#' && maze[x+1][y] != '*')
                  if(direccionactual==0){
                     if(getDistanceF()>25){
                     R2=true;
@@ -1178,7 +1208,8 @@ boolean step (int x, int y,int dir) {
                   if(R2){
                 direccionactual=0;
                 avanzar();
-    result = step(x, y+1,direccionactual);
+                Detener();
+    result = step(x+1, y);
     if (result) { return true;}
                 else{
                         if(dir==0){
@@ -1198,6 +1229,7 @@ boolean step (int x, int y,int dir) {
                         }
                           avanzar();
                           Detener();
+                          direccionactual=1;
                         }else if(dir==1){
                             
                          if(direccionactual==3){
@@ -1214,6 +1246,7 @@ boolean step (int x, int y,int dir) {
                             }
                            avanzar();
                                 Detener();
+                                direccionactual=0;
                         }else if(dir==2){
                                     if(direccionactual==0){
                                giroejeR();
@@ -1230,6 +1263,7 @@ boolean step (int x, int y,int dir) {
                            }
                             avanzar();
                             Detener();
+                            direccionactual=3;
                         }else{
                           if(direccionactual==0){
                             giroejeL();
@@ -1245,6 +1279,7 @@ boolean step (int x, int y,int dir) {
                             }
                           avanzar();
                           Detener();
+                          direccionactual=2;
                         }
                     }
     }
@@ -1261,7 +1296,7 @@ boolean step (int x, int y,int dir) {
     return false;
   }
 void solve(int x, int y) {
-    if (step(x,y,0)) {
+    if (step(x,y)) {
       maze[x][y] = 'S';
     }
   }
@@ -1271,10 +1306,15 @@ void solve(int x, int y) {
 int countbola=0;
 void loop()
 {   
+ 
+  
+  
 
+  
+  char azul=getColor();
  delay(2000);
 
-  if(getColor()=='a'){
+  if(azul=='a'){
     fase=2;
     }else if(getColor()=='y'){
      fase=1;
@@ -1282,25 +1322,20 @@ void loop()
         fase=3;
         }
 
-
-
- Serial.print("Fase: ");
- Serial.println(fase);
-
- 
- Serial.print("Color: ");
- Serial.println(getColor());
+ Serial.println("Fase: ");
+ Serial.print(fase);
  
   if(fase==1){
       avanzar();
       Detener();
 
       boolean sensorbola1=false;
-      while(countbola<50){
+      while(countbola<10){
         if(sensorbola()){
           sensorbola1=true;
           }
         delay(25);
+        Serial.println(countbola);
         countbola++;
         }
         if(!sensorbola1){
@@ -1310,7 +1345,7 @@ void loop()
           giroejeL();
         }
           Detener();
-      while(getColor()!='v') {
+      while(getColor()!='a') {
         MovimientoUnidadDelayFASE1();
      //   Detener();  
             
@@ -1322,12 +1357,8 @@ void loop()
  while(fase==2){      
        MovimientoUnidadDelayFASE2();
  }
-
-
- 
  Serial.println("Fase: ");
  Serial.print(fase);
- 
     while(fase==3){
      // MovimientoLaberinto();
 
@@ -1417,13 +1448,8 @@ void loop()
                Detener();
                avanzar();
                }
-      /*if(getColor()=='r'){
-          rampa=1;
-          giroejeR();
-          break;
-      }*/
+      
    }
-   
 rampa1();
 
 }
